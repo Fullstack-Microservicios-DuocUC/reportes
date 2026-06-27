@@ -44,13 +44,13 @@ public class ConsolidadoTurnoService {
         
         double toneladasChancador = todosLosCiclos.stream()
             .filter(c -> "COMPLETADO".equalsIgnoreCase(c.getEstadoCiclo()))
-            .filter(c -> "CHANCADOR".equalsIgnoreCase(c.getDestino()))
+            .filter(c -> "CHANCADO".equalsIgnoreCase(c.getDestino()))
             .mapToDouble(CicloResponseDTO::getToneladasCargadas)
             .sum();
 
         double toneladasRelave = todosLosCiclos.stream()
             .filter(c -> "COMPLETADO".equalsIgnoreCase(c.getEstadoCiclo()))
-            .filter(c -> "RELAVE".equalsIgnoreCase(c.getDestino()))
+            .filter(c -> "RELAVES".equalsIgnoreCase(c.getDestino()))
             .mapToDouble(CicloResponseDTO::getToneladasCargadas)
             .sum();
         

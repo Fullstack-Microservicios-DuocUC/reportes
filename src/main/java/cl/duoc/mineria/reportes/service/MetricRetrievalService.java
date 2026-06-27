@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import cl.duoc.mineria.reportes.exception.MetricaNoDisponibleException;
 import cl.duoc.mineria.reportes.model.CicloResponseDTO;
 import cl.duoc.mineria.reportes.model.OrdenMantencionResponseDTO;
 
@@ -21,35 +22,29 @@ public class MetricRetrievalService {
     // Trae ÚNICAMENTE los ciclos de este turno específico (Puerto 8088)
     public List<CicloResponseDTO> obtenerCiclosPorTurno(Long turnoId) {
         try {
-            // OPTIMIZADO: Ahora le pega al nuevo endpoint /turno/{id}
             CicloResponseDTO[] respuesta = this.webClient.get()
                 .uri("http://127.0.0.1:8088/api/v1/ciclos-transporte/turno/{id}", turnoId)
                 .retrieve()
                 .bodyToMono(CicloResponseDTO[].class)
                 .block();
-            
             return respuesta != null ? Arrays.asList(respuesta) : List.of();
         } catch (Exception e) {
-            System.out.println("[Reportes] Error al conectar con Ciclos Transporte (8088): " + e.getMessage());
-            return List.of();
+            throw new MetricaNoDisponibleException(
+                "No se pudo obtener los ciclos de transporte del turno " + turnoId + ": " + e.getMessage());
         }
     }
 
-    // Trae ÚNICAMENTE las mantenciones de este turno específico (Puerto 8089)
-    // Agregamos Long turnoId como parámetro al método
     public List<OrdenMantencionResponseDTO> obtenerIncidentesTaller(Long turnoId) {
         try {
-            // OPTIMIZADO: Ahora le pega al nuevo endpoint /turno/{id} en mantenciones
             OrdenMantencionResponseDTO[] respuesta = this.webClient.get()
                 .uri("http://127.0.0.1:8089/api/v1/mantenciones/turno/{turnoId}", turnoId)
                 .retrieve()
                 .bodyToMono(OrdenMantencionResponseDTO[].class)
                 .block();
-            
             return respuesta != null ? Arrays.asList(respuesta) : List.of();
         } catch (Exception e) {
-            System.out.println("[Reportes] Error al conectar con Mantenciones (8089): " + e.getMessage());
-            return List.of();
+            throw new MetricaNoDisponibleException(
+                "No se pudo obtener las mantenciones del turno " + turnoId + ": " + e.getMessage());
         }
     }
 

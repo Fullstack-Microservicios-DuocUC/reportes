@@ -73,4 +73,12 @@ public class GlobalExceptionHandler {
         problem.setProperty("tipoExcepcion", ex.getClass().getSimpleName());
         return problem;
     }
+
+    @ExceptionHandler(MetricaNoDisponibleException.class)
+    public ProblemDetail handleMetricaNoDisponible(MetricaNoDisponibleException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+        problem.setTitle("No se pudo generar el consolidado: dependencia no disponible");
+        problem.setProperty("timestamp", Instant.now());
+        return problem;
+    }
 }
