@@ -23,7 +23,7 @@ public class MetricRetrievalService {
     public List<CicloResponseDTO> obtenerCiclosPorTurno(Long turnoId) {
         try {
             CicloResponseDTO[] respuesta = this.webClient.get()
-                .uri("http://127.0.0.1:8088/api/v1/ciclos-transporte/turno/{id}", turnoId)
+                .uri("http://ciclo-transporte/api/v1/ciclos-transporte/turno/{id}", turnoId)
                 .retrieve()
                 .bodyToMono(CicloResponseDTO[].class)
                 .block();
@@ -37,7 +37,7 @@ public class MetricRetrievalService {
     public List<OrdenMantencionResponseDTO> obtenerIncidentesTaller(Long turnoId) {
         try {
             OrdenMantencionResponseDTO[] respuesta = this.webClient.get()
-                .uri("http://127.0.0.1:8089/api/v1/mantenciones/turno/{turnoId}", turnoId)
+                .uri("http://mantencion/api/v1/mantenciones/turno/{turnoId}", turnoId)
                 .retrieve()
                 .bodyToMono(OrdenMantencionResponseDTO[].class)
                 .block();
@@ -52,7 +52,7 @@ public class MetricRetrievalService {
     public boolean verificarTurnoExiste(Long turnoId) {
         try {
             Boolean existe = this.webClient.get()
-                .uri("http://127.0.0.1:8082/api/v1/turnos/existe/{id}", turnoId)
+                .uri("http://turnos/api/v1/turnos/existe/{id}", turnoId)
                 .retrieve()
                 .bodyToMono(Boolean.class)
                 .block();
